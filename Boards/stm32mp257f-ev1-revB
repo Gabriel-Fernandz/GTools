@@ -1,0 +1,14 @@
+CC_BOARD_NAME=stm32mp257f-ev1-revB
+CC_BOARD_BUILD=stm32mp257f-ev1
+
+source $GTools_boards/stm32mp2
+
+# TFA
+
+# OPTEE
+
+# UBOOT
+
+# KERNEL
+
+dev_prompt ${CC_BOARD_NAME}

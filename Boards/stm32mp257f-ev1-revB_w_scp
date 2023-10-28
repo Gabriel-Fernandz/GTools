@@ -1,0 +1,19 @@
+CC_BOARD_NAME=stm32mp257f-ev1-revB
+CC_BOARD_BUILD=stm32mp257f-ev1
+
+source $GTools_boards/stm32mp2
+
+# TFA
+# unset TFA_EXTERNAL_DT
+
+# OPTEE
+CFG_SCMI_SCPFW=n
+# unset CFG_EXT_DTS
+
+# UBOOT
+# unset EXT_DTS
+
+# KERNEL
+# unset KBUILD_EXTDTS
+
+dev_prompt ${CC_BOARD_NAME}

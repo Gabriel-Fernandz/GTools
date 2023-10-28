@@ -1,0 +1,377 @@
+#!/usr/bin/env python3
+
+"""g.
+
+Usage:
+  g alias <dir>
+  g clone
+  g hooks
+  g worktree [add | remove] <dir>
+  g workspace
+  g (-h | --help)
+  g --version
+
+Options:
+  <repos>       go to repo directory
+  -h --help     Show this screen.
+  --version     Show version.
+
+
+"""
+
+#   g clone (stm32 | upstream) (tfa | optee | uboot | kernel | tfm)
+
+import os
+import subprocess
+import json
+import dialog
+
+myGtools_path = os.environ['GTools_path']
+myRepos = os.environ['myRepos_path']
+# myViews = os.environ['myViews_path']
+dial = dialog.Dialog(dialog="dialog")
+
+
+repos_json_file = myGtools_path + '/repos.json'
+
+print ("git_repos_json_file", repos_json_file)
+
+def load_json_git_repos():
+	with open(repos_json_file) as f:
+		global Repos_data
+		Repos_data = json.load(f)
+
+def clear_screen():
+	os.system("clear")
+
+
+
+def git_clone(url):
+	cmd="git clone " + os.path.expandvars(url)
+
+	print(cmd)
+
+	cmd = cmd.split(' ')
+
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+
+	return process.stdout
+
+def git_hooks(hooks):
+	cmd=os.path.expandvars(hooks)
+
+	print(cmd)
+
+	cmd = cmd.split(' ')
+
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+
+	return process.stdout
+
+def get_repos():
+	repos = []
+
+	for repo in Repos_data:
+		status = True
+		repos.append((repo, '', status))
+		status = False
+
+	code, t_repo = dial.radiolist("git clone from :", choices=repos)
+
+
+	if code == 'cancel':
+		return None, None
+
+	repos = []
+
+	status = False
+
+	for type_repo in Repos_data[t_repo]:
+		repos.append((type_repo['name'], '', status))
+
+	code, type_repo = dial.checklist("Select the repo :", choices=repos)
+
+	if code == 'cancel':
+		return None, None
+
+	return t_repo, type_repo
+	# print (type_repo)
+
+	# exit(1)
+
+	# for x in Repos_data[repo]:
+	# 	if x['name'] == type_repo:
+	# 		return x
+
+	# return None
+
+def git_clone_repo():
+	type_repo, info_repos = get_repos()
+
+	if type_repo != None:
+		clear_screen()
+
+		for info_repo in info_repos:
+			for repo in Repos_data[type_repo]:
+				if repo['name'] == info_repo:
+					git_clone(repo['url'])
+					git_hooks(repo['hooks'])
+
+
+def git_hooks_repo():
+	type_repo, info_repos = get_repos()
+
+	if type_repo != None:
+		clear_screen()
+
+		for info_repo in info_repos:
+			for repo in Repos_data[type_repo]:
+				if repo['name'] == info_repo:
+					# git_clone(repo['url'])
+					git_hooks(repo['hooks'])
+
+
+
+def get_repos_in_current_directory():
+
+	cmd="find -maxdepth 2 -name .git"
+	cmd = cmd.split(' ')
+
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+
+	listes = process.stdout.split()
+
+	# print (process.stdout)
+
+	new_list = []
+	for rep in listes:
+		name = rep.replace('./','').replace('/.git', '')
+		# print(name)
+		new_list.append(name)
+
+	return new_list
+
+def get_current_repos():
+
+	repos = []
+
+	list = get_repos_in_current_directory()
+
+	for repo in list:
+		print (repo)
+		repos.append((repo, '', False))
+
+
+	code, repo = dial.checklist("git wortree from :", choices=repos)
+	if code == 'cancel':
+		return None
+
+	list_repo = []
+
+	for repo_name in repo:
+		# print (repo_name)
+		for x in Repos_data['stm32']:
+			if x['name'] == repo_name:
+				list_repo.append(x)
+
+	return list_repo
+
+def git_worktree_add(repo, dir, surname):
+
+	save_directory = os.getcwd()
+
+	if not os.path.exists(dir):
+		os.makedirs(dir)
+
+	os.chdir(repo)
+
+	cmd="git worktree add " + dir + '/' + surname + " --detach"
+	print(cmd)
+
+	cmd = cmd.split(' ')
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+
+	print (process.stdout)
+
+	os.chdir(save_directory)
+
+def worktree_add(repos, dir):
+
+	for repo in repos:
+		git_worktree_add(repo['name'], dir, repo['surname'])
+
+
+def worktree_add_repos(dir):
+
+	repo = get_current_repos()
+
+	if repo == None:
+		return
+
+
+	# git_worktree(repo['name'], dir, repo['surname'])
+	worktree_add(repo, dir)
+
+
+
+
+
+
+
+
+
+def git_worktree_remove(repo, dir, surname):
+
+	save_directory = os.getcwd()
+
+	if not os.path.exists(dir):
+		os.makedirs(dir)
+
+	os.chdir(repo)
+
+	cmd="git worktree remove " + dir + '/' + surname
+	print(cmd)
+
+	cmd = cmd.split(' ')
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+
+	print (process.stdout)
+
+	os.chdir(save_directory)
+
+def worktree_remove(repos, dir):
+
+	for repo in repos:
+		git_worktree_remove(repo['name'], dir, repo['surname'])
+
+
+def worktree_remove_repos(dir):
+
+	repo = get_current_repos()
+
+	if repo == None:
+		return
+
+	# git_worktree(repo['name'], dir, repo['surname'])
+	worktree_remove(repo, dir)
+
+
+
+
+# ALIAS
+def make_alias(dir):
+
+	HOME = os.environ['HOME']
+
+	# rep = HOME + '/myWorkspace/myViews'
+
+	# rep = HOME + '/views'
+
+	rep = dir
+
+	os.chdir(rep)
+
+	cmd="find -maxdepth 3 -type d".split(' ')
+
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, universal_newlines=True)
+	repo = process.stdout.split('\n')
+
+	alias_list= []
+
+	repos  = [
+		'tfa',
+		'tfm',
+		'uboot',
+		'optee',
+		'kernel',
+		'build'
+	]
+
+	for line in repo:
+		if line == '.' or line == '':
+			continue
+		line = line.replace('./', '')
+
+		tab = line.split('/')
+
+		if len(tab) == 3:
+			if tab[1] in repos:
+				# print (tab[1])
+				# print ('*', len(tab), line)
+				continue
+		alias = rep + '/' + line
+		alias_name = line.replace('/', '_')
+
+		cmd = 'alias ' + alias_name + '=\'cd ' + alias + '\'\n'
+		print (cmd)
+		alias_list.append(cmd)
+
+
+	def Save_alias_file(alias_list):
+		with open(HOME + '/.my_alias', "w") as filout:
+			for alias  in alias_list:
+				# print (alias)
+				# line = "export '" + export + "=" + export_env[export] + "'\n"
+				filout.write(alias)
+
+			# line = "export CC_BOARD_NAME=" + board_name + "'\n"
+			# filout.write(line)
+			# line = "export CC_BOARD_NAME=" + board_name + "\n"
+			# filout.write(line)
+
+			# line = "dev_prompt " + board_name
+			# filout.write(line)
+
+	alias="alias repos='cd " + HOME + "/myWorkspace/myRepos'\n"
+	alias_list.append(alias)
+
+	alias="alias views='cd " + HOME + "/views'\n"
+	alias_list.append(alias)
+
+	Save_alias_file(alias_list)
+
+
+
+
+
+def execute(cmd):
+	p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+
+	out = p.communicate()[0].decode('utf-8').strip()
+
+	return out
+
+
+load_json_git_repos()
+
+for x in Repos_data:
+	print (x)
+
+from docopt import docopt
+
+if __name__ == '__main__':
+	arg = docopt(__doc__, version='go 1.0')
+
+	# git_clone()
+print (arg)
+
+if arg['clone']:
+	print ()
+	git_clone_repo()
+
+elif arg['hooks']:
+	print ()
+	git_hooks_repo()
+
+elif arg['worktree']:
+	if arg['add']:
+		worktree_add_repos(arg['<dir>'])
+	if arg['remove']:
+		worktree_remove_repos(arg['<dir>'])
+
+elif arg['alias']:
+	print ()
+	make_alias(arg['<dir>'])
+
+else:
+	print ("else")

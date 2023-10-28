@@ -1,0 +1,16 @@
+CC_BOARD_NAME=stm32mp257f-valid3-revB
+CC_BOARD_BUILD=stm32mp257f-valid3
+
+source $GTools_boards/stm32mp2
+
+# TFA
+
+# OPTEE
+
+# UBOOT
+
+# KERNEL
+KERNEL_DEFCONFIG+="fragment-03-defconfig-cleanup-valid.config "
+KERNEL_DEFCONFIG+="fragment-04-defconfig-addons-valid.config "
+
+dev_prompt ${CC_BOARD_NAME}

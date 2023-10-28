@@ -1,0 +1,16 @@
+CC_BOARD_NAME=stm32mp257f-dk-revA
+CC_BOARD_BUILD=stm32mp257f-dk
+
+source $GTools_boards/stm32mp2
+
+# TFA
+unset STM32MP_DDR4_TYPE
+STM32MP_LPDDR4_TYPE=1
+
+# OPTEE
+
+# UBOOT
+
+# KERNEL
+
+dev_prompt $CC_BOARD_NAME

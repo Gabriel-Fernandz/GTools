@@ -1,0 +1,69 @@
+{
+	"stm32" : [
+		{
+			"name" : "tf-a",
+			"surname" : "tfa",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/st/tf-a",
+			"hooks" : "scp -p -P 29418 ${USER}@gerrit.st.com:hooks/commit-msg tf-a/.git/hooks/"
+		},
+		{
+			"name" : "optee_os",
+			"surname" : "optee",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/optee/optee_os",
+			"hooks" : "scp -p -P 29418 ${USER}@gerrit.st.com:hooks/commit-msg optee_os/.git/hooks/"
+		},
+		{
+			"name" : "u-boot",
+			"surname" : "uboot",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/st/u-boot",
+			"hooks" : "scp -p -P 29418 ${USER}@gerrit.st.com:hooks/commit-msg u-boot/.git/hooks/"
+		},
+		{
+			"name" : "linux-stm32",
+			"surname" : "kernel",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/st/linux-stm32",
+			"hooks" : "scp -p -P 29418 ${USER}@gerrit.st.com:hooks/commit-msg linux-stm32/.git/hooks/"
+		},
+		{
+			"name" : "trusted-firmware-m",
+			"surname" : "tfm",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/st/TF-M/trusted-firmware-m",
+ 			"hooks" : "scp -P 29418 ${USER}@gerrit.st.com:hooks/commit-msg trusted-firmware-m/.git/hooks/"
+		},
+		{
+			"name" : "SCP-firmware",
+			"surname" : "SCP-firmware",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/optee/SCP-firmware",
+			"hooks" : "scp -p -P 29418 gerrit.st.com:hooks/commit-msg SCP-firmware/.git/hooks/"
+		},
+		{
+			"name" : "dt-stm32mp",
+			"surname" : "dt-stm32mp",
+			"url" : "ssh://${USER}@gerrit.st.com:29418/mpu/oe/st/dt-stm32mp",
+			"hooks" : "scp -p -P 29418 gerrit.st.com:hooks/commit-msg dt-stm32mp/.git/hooks/"
+		}
+	],
+	"upstream" :
+	[
+		{
+			"name" : "arm-trusted-firmware.git",
+			"surname" : "tfa",
+			"url" : "https://github.com/ARM-software/arm-trusted-firmware.git"
+		},
+		{
+			"name" : "optee_os.git",
+			"surname" : "optee",
+			"url" : "https://github.com/OP-TEE/optee_os.git"
+		},
+		{
+			"name" : "u-boot.git",
+			"surname" : "uboot",
+			"url" : "https://github.com/OP-TEE/uboot.git"
+		},
+		{
+			"name" : "linux-next.git",
+			"surname" : "kernel",
+			"url" : "https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git"
+		}
+	]
+}

@@ -1,0 +1,16 @@
+CC_BOARD_NAME=stm32mp135f-dk
+CC_BOARD_BUILD=stm32mp135f-dk
+
+source $GTools_boards/stm32mp1
+
+
+# TFA
+
+# OPTEE
+
+# UBOOT
+UBOOT_DEFCONFIG="stm32mp13_defconfig"
+
+# KERNEL
+
+dev_prompt ${CC_BOARD_NAME}
