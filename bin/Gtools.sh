@@ -252,32 +252,6 @@ g_board()
 	source $conf_file
 }
 
-tfa_cmd()
-{
-	. build_tfa.sh $@
-}
-
-tfm_cmd()
-{
-	. build_tfm.sh $@
-}
-
-optee_cmd()
-{
-	. build_optee.sh $@
-}
-
-uboot_cmd()
-{
-	. build_uboot.sh $@
-}
-
-
-kernel_cmd()
-{
-	. build_kernel.sh $@
-}
-
 save_current_dir()
 {
 	echo $PWD > /tmp/.gmake_dir
@@ -326,37 +300,6 @@ git_checkout_dev()
 git_checkout_valid()
 {
 	git_checkout valid
-}
-
-g()
-{
-	update_var
-
-	echo "$my_current_repo"
-
-	save_current_dir
-
-	case "$my_current_repo" in
-
-	"tfa")
-		tfa_cmd "$@"
-		;;
-	 "optee")
- 	#"optee_os")
-		# shift;
-		optee_cmd "$@"
-		;;
-	"uboot")
-		uboot_cmd "$@"
-		;;
-	"kernel")
- 	#"linux-stm32")
-		kernel_cmd $@
-		;;
-	"tfm")
-		tfm_cmd $@
-		;;
-	esac
 }
 
 export GTools_path=`git config --file=$HOME/.gtools.ini --get gtools.path`

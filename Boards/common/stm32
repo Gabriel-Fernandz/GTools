@@ -79,3 +79,6 @@ do
 		unset "$var"
 	fi
 done
+
+
+echo ${optee_command[@]}

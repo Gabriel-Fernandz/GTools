@@ -1,0 +1,74 @@
+source $GTOOLS_PATH/Boards/common/stm32
+echo $optee_command
+export SDK=$SDK_MP2
+
+# source $SDK
+# unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
+
+export PLATFORM="stm32mp2"
+
+export CC_EXTERNAL_DT_PATH="../dt-stm32mp"
+export CC_EXTERNAL_DT_TFA_PATH=$CC_EXTERNAL_DT_PATH/tf-a
+export CC_EXTERNAL_DT_OPTEE_PATH=$CC_EXTERNAL_DT_PATH/optee
+export CC_EXTERNAL_DT_UBOOT_PATH=$CC_EXTERNAL_DT_PATH/u-boot
+export CC_EXTERNAL_DT_KERNEL_PATH=$CC_EXTERNAL_DT_PATH/linux
+
+# unset CC_EXTERNAL_DT_PATH
+
+export CC_SCP_FIRMWARE_PATH="../SCP-firmware"
+
+
+# TFA
+export TFA_CC_ARCH="ARCH=aarch64"
+
+export SPD=opteed
+export PLAT=${PLATFORM}
+export DTB_FILE_NAME=${CC_BOARD_NAME}.dtb
+export OPENSSL_DIR='${OECORE_NATIVE_SYSROOT}/usr'
+export STM32MP_SDMMC=1
+export STM32MP_DDR4_TYPE=1
+export DEBUG=1
+export TFA_EXTERNAL_DT="$CC_EXTERNAL_DT_TFA_PATH"
+
+# OPTEE
+export CROSS_COMPILE64=$CROSS_COMPILE
+export OPTEE_CC_ARCH="ARCH=arm"
+
+# export PLATFORM=${PLATFORM}
+export CFG_ARM64_core=y
+export CFLAGS="-std=gnu99"
+export LIBGCC_LOCATE_CFLAGS='--sysroot=${SDKTARGETSYSROOT}'
+export CFG_EMBED_DTB_SOURCE_FILE=${CC_BOARD_NAME}.dts
+export CFG_TEE_CORE_DEBUG=y
+export CFG_TEE_CORE_LOG_LEVEL=2
+export CFG_EXT_DTS=${CC_EXTERNAL_DT_OPTEE_PATH}
+export CFG_SCP_FIRMWARE=${CC_SCP_FIRMWARE_PATH}
+export CFG_SCMI_SCPFW=y
+
+# UBOOT
+export UBOOT_DEFCONFIG="stm32mp25_revA_defconfig"
+export UBOOT_DEVICE_TREE="DEVICE_TREE=${CC_BOARD_NAME} "
+export EXT_DTS="$CC_EXTERNAL_DT_UBOOT_PATH"
+
+# KERNEL
+export KERNEL_IMAGE_FILE="arch/arm64/boot/Image.gz"
+export KERNEL_DTB_FILES="arch/arm64/boot/dts/st/stm32mp2*.dtb"
+unset KERNEL_LOADADDR
+export W=1
+export KBUILD_EXTDTS="$CC_EXTERNAL_DT_KERNEL_PATH"
+export KERNEL_BUILD_DIR=../build/stm32mp2/kernel
+export INSTALL_MOD_PATH="modules"
+
+# LOADADDR=0x87000000
+export KERNEL_USER_MAKE_OPTIONS="Image.gz "
+export KERNEL_USER_MAKE_OPTIONS+="vmlinux "
+export KERNEL_USER_MAKE_OPTIONS+="dtbs "
+
+export KERNEL_DEFCONFIG="fragment-01-defconfig-cleanup.config "
+export KERNEL_DEFCONFIG+="fragment-02-defconfig-addons.config "
+export KERNEL_DEFCONFIG+="fragment-02-defconfig-addons-reva.config "
+
+export TFM_CC_CMAKE_BUILD_TYPE="debug"
+export TFM_CC_TFM_PLATFORM="stm/stm32mp257f_ev1"
+export TFM_OPTIONS="-DTFM_PROFILE=profile_small"

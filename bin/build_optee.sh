@@ -10,22 +10,40 @@ bl32=${CC_BUILD_DIR}/core/tee-header_v2.bin
 bl32_extra1=${CC_BUILD_DIR}/core/tee-pager_v2.bin
 bl32_extra2=${CC_BUILD_DIR}/core/tee-pageable_v2.bin
 
+source /home/frq07381/myWorkspace/GTools/Boards/common/optee_cmd
+
+echo DSK=$SDK
+
+source $SDK
+
+unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
+echo CFG_SCMI_SCPFW=$CFG_SCMI_SCPFW 
+
+echo "ouuu ${optee_command[@]}"
+
 if test -z "$CC_BOARD_NAME"; then
 	echo "CC_BOARD_NAME : NOT SET !!!"
 	read
 	exit 0
 fi
 
-if test "$CFG_EXT_DTS"; then
-	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
-fi
+unset CFG_EXT_DTS
+unset CFG_SCP_FIRMWARE
 
-if test "$CFG_SCP_FIRMWARE"; then
-	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
-fi
+# if test "$CFG_EXT_DTS"; then
+# 	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
+# fi
+
+# if test "$CFG_SCP_FIRMWARE"; then
+# 	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
+# fi
 
 _var()
 {
+	echo optee var
+	echo ${optee_command[@]}
+
 	for var in ${optee_command[@]}
 	do
 		echo "$var=${!var} "
@@ -50,7 +68,8 @@ _make()
 
 	cmd+=" $@"
 	cmd=`eval echo $cmd`
-	gexecute "$cmd"
+
+	g_execute.sh "$cmd"
 }
 
 _rmbuild()
@@ -61,25 +80,25 @@ _rmbuild()
 	fi
 
 	cmd="rm -rf ${CC_BUILD_DIR}"
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _install()
 {
-	gexecute "mkdir -p $fip_dir"
+	g_execute.sh "mkdir -p $fip_dir"
 
-	gexecute "cp $bl32 $fip_dir"
-	gexecute "cp $bl32_extra1 $fip_dir"
-	gexecute "cp $bl32_extra2 $fip_dir"
+	g_execute.sh "cp $bl32 $fip_dir"
+	g_execute.sh "cp $bl32_extra1 $fip_dir"
+	g_execute.sh "cp $bl32_extra2 $fip_dir"
 }
 
 _update_fip()
 {
 	echo fiptool=$fiptool
 
-	gexecute "$fip_tool --verbose update --tos-fw $bl32 $fip_file"
-	gexecute "$fip_tool --verbose update --tos-fw-extra1 $bl32_extra1 $fip_file"
-	gexecute "$fip_tool --verbose update --tos-fw-extra2 $bl32_extra2 $fip_file"
+	g_execute.sh "$fip_tool --verbose update --tos-fw $bl32 $fip_file"
+	g_execute.sh "$fip_tool --verbose update --tos-fw-extra1 $bl32_extra1 $fip_file"
+	g_execute.sh "$fip_tool --verbose update --tos-fw-extra2 $bl32_extra2 $fip_file"
 }
 
 _flash()
@@ -109,4 +128,4 @@ _who()
 }
 
 # echo "$@"
-eval _"$@"
+# eval _"$@"

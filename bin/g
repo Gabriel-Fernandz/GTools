@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo $CC_BOARD_NAME
+echo DDDDDDDSK=$SDK
+
+my_current_repo=`g_get_repo.py`
+
+case "$my_current_repo" in
+
+"tfa")
+	. build_tfa.sh $@
+	;;
+ "optee")
+	source build_optee.sh
+	eval _"$@"
+	;;
+"uboot")
+	source build_uboot.sh
+	eval _$@
+	;;
+"kernel")
+	. build_kernel.sh $@
+	;;
+"tfm")
+	. build_tfm.sh $@
+	;;
+esac

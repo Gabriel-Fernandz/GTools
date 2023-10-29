@@ -22,6 +22,13 @@ if test "$EXT_DTS"; then
 	EXT_DTS=$(realpath $EXT_DTS)
 fi
 
+echo DSK=$SDK
+
+source $SDK
+
+unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
+
 _var()
 {
 	for var in ${uboot_command[@]}
@@ -37,7 +44,7 @@ _defconfig()
 	cmd+="$@ "
 	cmd=`eval echo $cmd`
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _make()
@@ -56,7 +63,7 @@ _make()
 
 	cmd+=" $@"
 	cmd=`eval echo $cmd`
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _rmbuild()
@@ -67,21 +74,21 @@ _rmbuild()
 	fi
 
 	cmd="rm -rf ${CC_BUILD_DIR}"
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _install()
 {
-	gexecute "mkdir -p $fip_dir"
+	g_execute.sh "mkdir -p $fip_dir"
 
-	gexecute "cp $uboot_bin $fip_dir"
-	gexecute "cp $uboot_nodtb $fip_dir"
-	gexecute "cp $uboot_dtb $fip_dir"
+	g_execute.sh "cp $uboot_bin $fip_dir"
+	g_execute.sh "cp $uboot_nodtb $fip_dir"
+	g_execute.sh "cp $uboot_dtb $fip_dir"
 }
 
 _update_fip()
 {
-	gexecute "$fip_tool --verbose update --nt-fw $uboot_nodtb --hw-config $uboot_dtb $fip_file"
+	g_execute.sh "$fip_tool --verbose update --nt-fw $uboot_nodtb --hw-config $uboot_dtb $fip_file"
 }
 
 _make_all()
@@ -100,5 +107,5 @@ _all()
 	_make && _install && _update_fip && _flash && reset_board
 }
 
-eval _$@
+# eval _$@
 
