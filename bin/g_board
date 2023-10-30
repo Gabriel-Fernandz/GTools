@@ -1,0 +1,107 @@
+
+reset()
+{
+        python -c 'import termios; termios.tcsendbreak(3, 0)' 3>/dev/ttyACM0
+}
+
+wait_mount()
+{
+	echo "Wait -->: $1"
+
+	while : ; do
+		partname=`lsblk -r -o NAME,PARTLABEL,MOUNTPOINT | grep $1 |  cut -d ' ' -f2`
+		if [[ $partname != "" ]]; then
+			break
+		fi
+
+		sleep 0.5
+
+	done
+}
+
+mount_sdcard_and_wait()
+{
+	serial_port=/dev/ttyACM0
+	board_is_resting=0
+
+	while : ; do
+
+		partname=`lsblk -r -o NAME,PARTLABEL,MOUNTPOINT | grep $1 |  cut -d ' ' -f2`
+		# echo partname=$partname
+		if [[ $partname == "" ]]; then
+			if [ "$board_is_resting" == 0 ]; then
+				# echo reset the board
+				board_is_resting=1
+				reset
+				sleep 2
+			else
+				echo "ums 0 mmc 0" > $serial_port
+				sleep 0.5
+			fi
+		else
+			# echo $1 is mounted
+			break
+		fi
+
+	done
+
+	board_is_resting=0
+
+	sleep 0.5
+
+}
+
+gpartition_gflash()
+{
+	devname=/dev/disk/by-partlabel/$1
+
+	if ! test -f $2; then
+		echo ""
+		echo $2 doesnt exist !!!!!!!!
+		echo ""
+		return -1
+	fi
+
+	cmd="dd if=$2 of=$devname bs=1M conv=fdatasync"
+	# echo $cmd
+
+	wait_mount $1
+	# mount_sdcard_and_wait $1
+
+	g_execute.sh $cmd
+
+	/bin/sync
+}
+
+flash_stm32()
+{
+	file=$1
+
+	case $PLATFORM in
+
+	stm32mp1)
+		FSBL="fsbl"
+		;;
+	stm32mp2)
+		FSBL="fsbla"
+		;;
+	*)
+		echo ""
+		echo  PLATFORM=$PLATFORM doesnt exist !!!!!!!!
+		echo ""
+		return -1
+	esac
+
+
+	gpartition_gflash ${FSBL}1 $file
+}
+
+flash_fip()
+{
+	file=$1
+
+	gpartition_gflash "$FIP" $file
+}
+
+
+eval $@

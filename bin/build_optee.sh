@@ -10,17 +10,19 @@ bl32=${CC_BUILD_DIR}/core/tee-header_v2.bin
 bl32_extra1=${CC_BUILD_DIR}/core/tee-pager_v2.bin
 bl32_extra2=${CC_BUILD_DIR}/core/tee-pageable_v2.bin
 
-source /home/frq07381/myWorkspace/GTools/Boards/common/optee_cmd
+. cc_cmd_make.sh
 
-echo DSK=$SDK
-
+echo SDK=$SDK
 source $SDK
 
-unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
 
-echo CFG_SCMI_SCPFW=$CFG_SCMI_SCPFW 
+# # source $SDK
 
-echo "ouuu ${optee_command[@]}"
+# unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
+# echo CFG_SCMI_SCPFW=$CFG_SCMI_SCPFW 
+
+# echo "ouuu ${optee_command[@]}"
 
 if test -z "$CC_BOARD_NAME"; then
 	echo "CC_BOARD_NAME : NOT SET !!!"
@@ -31,7 +33,7 @@ fi
 unset CFG_EXT_DTS
 unset CFG_SCP_FIRMWARE
 
-export CROSS_COMPILE64=$CROSS_COMPILE
+# export CROSS_COMPILE64=$CROSS_COMPILE
 
 # if test "$CFG_EXT_DTS"; then
 # 	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
@@ -41,32 +43,24 @@ export CROSS_COMPILE64=$CROSS_COMPILE
 # 	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
 # fi
 
+
 _var()
 {
-	echo optee var
-	echo ${optee_command[@]}
-
-	for var in ${optee_command[@]}
-	do
-		echo "$var=${!var} "
-	done
+	display_cc_command ${optee_cc_undirect_command[@]}
+	echo
+	display_cc_command ${optee_cc_direct_command[@]}
 }
 
 _make()
 {
-
 	cmd="make "
 
 	cmd+="-j $(nproc) "
 	cmd+="O=${CC_BUILD_DIR} "
-	cmd+="$OPTEE_CC_ARCH "
 
-	for var in ${optee_command[@]}
-	do
-		if [ -n "${!var}" ]; then
-			cmd+="$var=${!var} "
-		fi
-	done
+	make_cc_undirect_command ${optee_cc_undirect_command[@]}
+
+	make_cc_direct_command ${optee_cc_direct_command[@]}
 
 	cmd+=" $@"
 	cmd=`eval echo $cmd`
@@ -105,7 +99,7 @@ _update_fip()
 
 _flash()
 {
-	flash_fip ${CC_BUILD_DIR}/../fip/$fip_name
+	g_board flash_fip ${CC_BUILD_DIR}/../fip/$fip_name
 }
 
 _make_all()
@@ -115,8 +109,8 @@ _make_all()
 
 _all()
 {
-	mount_sdcard_and_wait $FIP & disown %1
-	_make && _install && _update_fip && _flash && reset_board
+	g_board mount_sdcard_and_wait $FIP & disown %1
+	_make && _install && _update_fip && _flash && g_board reset
 }
 
 _checkpatch()

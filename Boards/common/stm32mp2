@@ -1,6 +1,10 @@
-source $GTOOLS_PATH/Boards/common/stm32
-echo $optee_command
-export SDK=$SDK_MP2
+. cc_cmd_clean.sh
+
+export SDK=`g_sdk get MP2 path`
+
+export tfa_file='tfa.stm32'
+export fip_name="fip.bin"
+export FIP="fip-a"
 
 # source $SDK
 # unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
@@ -20,25 +24,29 @@ export CC_SCP_FIRMWARE_PATH="../SCP-firmware"
 
 
 # TFA
-export TFA_CC_ARCH="ARCH=aarch64"
+export CC_TFA_ARCH="ARCH=aarch64"
+export CC_TFA_PLAT="PLAT=${PLATFORM}"
+export CC_TFA_DEBUG="DEBUG=1"
+export CC_TFA_CFLAGS="CFLAGS="
+export CC_TFA_LDFLAGS="LDFLAGS="
 
 export SPD=opteed
-export PLAT=${PLATFORM}
 export DTB_FILE_NAME=${CC_BOARD_NAME}.dtb
 export OPENSSL_DIR='${OECORE_NATIVE_SYSROOT}/usr'
 export STM32MP_SDMMC=1
 export STM32MP_DDR4_TYPE=1
-export DEBUG=1
 export TFA_EXTERNAL_DT="$CC_EXTERNAL_DT_TFA_PATH"
 
 # OPTEE
-export CROSS_COMPILE64=$CROSS_COMPILE
-export OPTEE_CC_ARCH="ARCH=arm"
+export CC_OPTEE_ARCH="ARCH=arm"
+export CC_OPTEE_PLATFORM="PLATFORM=${PLATFORM}"
+export CC_OPTEE_CFLAGS="CFLAGS=-std=gnu99"
+export CC_OPTEE_LDFLAGS="LDFLAGS="
+export CC_OPTEE_LIBGCC_LOCATE_CFLAGS='LIBGCC_LOCATE_CFLAGS=--sysroot=${SDKTARGETSYSROOT}'
+export CC_OPTEE_CFLAGS32=''
+export CROSS_COMPILE64='${CROSS_COMPILE}'
 
-# export PLATFORM=${PLATFORM}
 export CFG_ARM64_core=y
-export CFLAGS="-std=gnu99"
-export LIBGCC_LOCATE_CFLAGS='--sysroot=${SDKTARGETSYSROOT}'
 export CFG_EMBED_DTB_SOURCE_FILE=${CC_BOARD_NAME}.dts
 export CFG_TEE_CORE_DEBUG=y
 export CFG_TEE_CORE_LOG_LEVEL=2

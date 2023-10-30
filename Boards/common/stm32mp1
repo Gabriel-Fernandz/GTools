@@ -1,59 +1,66 @@
-source $GTOOLS_PATH/Boards/common/stm32
+. cc_cmd_clean.sh
 
-SDK=$SDK_MP1
+export SDK=`g_sdk get MP1 path`
 
-source $SDK
+export tfa_file='tfa.stm32'
+export fip_name="fip.bin"
+export FIP="fip-a"
 
-unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+# source $SDK
 
-PLATFORM="stm32mp1"
+# unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
+
+export PLATFORM="stm32mp1"
 
 # TFA
-TFA_CC_ARCH="ARCH=aarch32"
+export CC_TFA_ARCH="ARCH=aarch32"
+export CC_TFA_PLAT="PLAT=${PLATFORM}"
+export CC_TFA_CFLAGS="CFLAGS="
+export CC_TFA_LDFLAGS="LDFLAGS="
+export CC_TFA_DEBUG="DEBUG=1"
 
-AARCH32_SP=optee
-ARM_ARCH_MAJOR=7
-
-PLAT=${PLATFORM}
-DTB_FILE_NAME=${CC_BOARD_NAME}.dtb
-OPENSSL_DIR='${OECORE_NATIVE_SYSROOT}/usr'
-STM32MP_SDMMC=1
-DEBUG=1
+export AARCH32_SP=optee
+export ARM_ARCH_MAJOR=7
+export DTB_FILE_NAME=${CC_BOARD_NAME}.dtb
+export OPENSSL_DIR='${OECORE_NATIVE_SYSROOT}/usr'
+export STM32MP_SDMMC=1
 unset TFA_EXTERNAL_DT
 
 # OPTEE
-export CROSS_COMPILE64=$CROSS_COMPILE
 OPTEE_CC_ARCH="ARCH=arm"
 
-PLATFORM=${PLATFORM}
-CFLAGS="-std=gnu99"
-# LIBGCC_LOCATE_CFLAGS="--sysroot=${SDKTARGETSYSROOT}"
+export CC_OPTEE_ARCH="ARCH=arm"
+export CC_OPTEE_PLATFORM="PLATFORM=${PLATFORM}"
+export CC_OPTEE_CFLAGS="CFLAGS=-std=gnu99"
+export CC_OPTEE_LDFLAGS="LDFLAGS="
 unset LIBGCC_LOCATE_CFLAGS
-CFLAGS32='--sysroot=${SDKTARGETSYSROOT}'
-CFG_EMBED_DTB_SOURCE_FILE=${CC_BOARD_NAME}.dts
-CFG_TEE_CORE_DEBUG=y
-CFG_TEE_CORE_LOG_LEVEL=2
-CFG_SCMI_SCPFW=n
+export CC_OPTEE_CFLAGS32='CFLAGS32=--sysroot=${SDKTARGETSYSROOT}'
+
+export CFG_EMBED_DTB_SOURCE_FILE=${CC_BOARD_NAME}.dts
+export CFG_TEE_CORE_DEBUG=y
+export CFG_TEE_CORE_LOG_LEVEL=2
+export CFG_SCMI_SCPFW=n
 
 # UBOOT
-UBOOT_DEFCONFIG="stm32mp13_defconfig"
-UBOOT_DEVICE_TREE="DEVICE_TREE=${CC_BOARD_NAME} "
+export UBOOT_DEFCONFIG="stm32mp13_defconfig"
+export UBOOT_DEVICE_TREE="DEVICE_TREE=${CC_BOARD_NAME} "
 
 # KERNEL
-KERNEL_IMAGE_FILE="arch/arm/boot/uImage"
-KERNEL_DTB_FILES="arch/arm/boot/dts/stm32mp1*.dtb"
-KERNEL_BUILD_DIR=../build/stm32mp1/kernel
-INSTALL_MOD_PATH="modules"
+export KERNEL_IMAGE_FILE="arch/arm/boot/uImage"
+export KERNEL_DTB_FILES="arch/arm/boot/dts/stm32mp1*.dtb"
+export KERNEL_BUILD_DIR=../build/stm32mp1/kernel
+export INSTALL_MOD_PATH="modules"
 
-LOADADDR=0xC0208000
-W=1
+export LOADADDR=0xC0208000
+export W=1
 
-KERNEL_USER_MAKE_OPTIONS="uImage "
-KERKERNEL_USER_MAKE_OPTIONSNEL_OPTIONS+="vmlinux "
-KERNEL_USER_MAKE_OPTIONS+="dtbs "
+export export KERNEL_USER_MAKE_OPTIONS="uImage "
+export KERKERNEL_USER_MAKE_OPTIONSNEL_OPTIONS+="vmlinux "
+export KERNEL_USER_MAKE_OPTIONS+="dtbs "
 
 
-KERNEL_DEFCONFIG="fragment-01-multiv7_cleanup.config "
-KERNEL_DEFCONFIG+="fragment-02-multiv7_addons.config "
-KERNEL_DEFCONFIG+="fragment-03-multiv7_cleanup_valid.config "
-KERNEL_DEFCONFIG+="fragment-04-multiv7_addons_valid.config "
+export KERNEL_DEFCONFIG="fragment-01-multiv7_cleanup.config "
+export KERNEL_DEFCONFIG+="fragment-02-multiv7_addons.config "
+export KERNEL_DEFCONFIG+="fragment-03-multiv7_cleanup_valid.config "
+export KERNEL_DEFCONFIG+="fragment-04-multiv7_addons_valid.config "

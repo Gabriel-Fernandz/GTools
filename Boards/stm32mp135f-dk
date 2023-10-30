@@ -1,7 +1,7 @@
-CC_BOARD_NAME=stm32mp135f-dk
-CC_BOARD_BUILD=stm32mp135f-dk
+export CC_BOARD_NAME=stm32mp135f-dk
+export CC_BOARD_BUILD=stm32mp135f-dk
 
-source $GTools_boards/stm32mp1
+source $GTOOLS_PATH/Boards/common/stm32mp1
 
 
 # TFA
@@ -9,8 +9,8 @@ source $GTools_boards/stm32mp1
 # OPTEE
 
 # UBOOT
-UBOOT_DEFCONFIG="stm32mp13_defconfig"
+export UBOOT_DEFCONFIG="stm32mp13_defconfig"
 
 # KERNEL
 
-dev_prompt ${CC_BOARD_NAME}
+. dev_prompt.sh ${CC_BOARD_NAME}

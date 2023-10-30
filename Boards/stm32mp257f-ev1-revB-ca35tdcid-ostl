@@ -1,7 +1,7 @@
-CC_BOARD_NAME=stm32mp257f-ev1-revB-ca35tdcid-ostl
-CC_BOARD_BUILD=stm32mp257f-ev1
+export CC_BOARD_NAME=stm32mp257f-ev1-revB-ca35tdcid-ostl
+exportCC_BOARD_BUILD=stm32mp257f-ev1
 
-source $GTools_boards/stm32mp2
+source $GTOOLS_PATH/Boards/common/stm32mp2
 
 # TFA
 
@@ -11,4 +11,4 @@ source $GTools_boards/stm32mp2
 
 # KERNEL
 
-dev_prompt ${CC_BOARD_NAME}
+. dev_prompt.sh ${CC_BOARD_NAME}

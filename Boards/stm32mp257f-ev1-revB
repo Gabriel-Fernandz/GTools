@@ -10,6 +10,5 @@ source $GTOOLS_PATH/Boards/common/stm32mp2
 # UBOOT
 
 # KERNEL
-echo CC_BOARD_NAME=$CC_BOARD_NAME
 
-#dev_prompt ${CC_BOARD_NAME}
+. dev_prompt.sh ${CC_BOARD_NAME}

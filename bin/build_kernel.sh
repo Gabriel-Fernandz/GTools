@@ -17,6 +17,10 @@
 
 echo "Linux build:"
 
+echo SDK=$SDK
+source $SDK
+# unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+
 CC_BUILD_DIR="../build/${PLATFORM}/kernel"
 
 if test -z "$CC_BOARD_NAME"; then
@@ -32,6 +36,8 @@ fi
 if test "$KBUILD_EXTDTS"; then
 	KBUILD_EXTDTS=$(realpath $KBUILD_EXTDTS)
 fi
+
+. cc_cmd_make.sh
 
 _var()
 {
@@ -69,7 +75,7 @@ _defconfig()
 	cmd+=" ARCH=${ARCH} "
 	cmd+=" defconfig ${KERNEL_DEFCONFIG} "
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _menuconfig()
@@ -79,7 +85,7 @@ _menuconfig()
 	cmd+=" ARCH=${ARCH} "
 	cmd+=" menuconfig"
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _savedefconfig()
@@ -89,9 +95,9 @@ _savedefconfig()
 	cmd+=" ARCH=${ARCH} "
 	cmd+=" savedefconfig"
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 
-        gexecute "cp ${CC_BUILD_DIR}/defconfig arch/$ARCH/configs/$(echo ${DEFCONFIG} | cut -d' ' -f1)"
+        g_execute.sh "cp ${CC_BUILD_DIR}/defconfig arch/$ARCH/configs/$(echo ${DEFCONFIG} | cut -d' ' -f1)"
 }
 
 
@@ -105,14 +111,14 @@ _make()
 		cmd+=" $@"
 	fi
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _clean()
 {
 	cmd="make clean distclean"
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _modules()
@@ -122,7 +128,7 @@ _modules()
 
 	cmd+=" modules"
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _install()
@@ -133,10 +139,10 @@ _install()
 	# cmd+=" INSTALL_MOD_PATH=${INSTALL_MOD_PATH}"
 	# cmd+=" modules_install"
 
-	# gexecute "$cmd"
+	# g_execute.sh "$cmd"
 
-	gexecute "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/build"
-	gexecute "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/source"
+	g_execute.sh "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/build"
+	g_execute.sh "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/source"
 
 }
 
@@ -146,14 +152,14 @@ _all()
 
 	cmd+=" all dtbs modules"
 
-	gexecute "$cmd"
+	g_execute.sh "$cmd"
 }
 
 _flash()
 {
 	devname=/dev/disk/by-partlabel/bootfs
 
-	wait_mount bootfs
+	g_board wait_mount bootfs
 
 	dtb_file=${CC_BUILD_DIR}/${KERNEL_DTB_FILES}
 	image_file=${CC_BUILD_DIR}/${KERNEL_IMAGE_FILE}
@@ -199,7 +205,7 @@ _all_old()
 	# cmd+=" ${KERNEL_LOADADDR}"
 	# cmd+=" all dtbs modules"
 
-	# gexecute "$cmd"
+	# g_execute.sh "$cmd"
 	# _make
 	# _flash
 
@@ -208,7 +214,7 @@ _all_old()
 	# _make && _flash && reset_board
 
 
-	_make && mount_sdcard_and_wait bootfs && _flash && reset_board
+	_make && g_board mount_sdcard_and_wait bootfs && _flash && g_board reset
 }
 
 _go_build()
@@ -222,4 +228,4 @@ _pop()
 	popd
 }
 
-eval _"$@"
+# eval _"$@"

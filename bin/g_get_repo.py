@@ -4,8 +4,8 @@ import subprocess
 process = subprocess.run(['git','config', '--get', 'remote.origin.url'], check=False, stdout=subprocess.PIPE, universal_newlines=True)
 
 repo = process.stdout.strip('\n').split('/')[-1]
-if repo == "":
-	repo = process.stdout.strip('\n').split('/')[-2]
+# if repo == "":
+# 	repo = process.stdout.strip('\n').split('/')[-2]
 
 DIC_REPOS = {}
 

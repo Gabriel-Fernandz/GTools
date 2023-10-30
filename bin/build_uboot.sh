@@ -22,11 +22,13 @@ if test "$EXT_DTS"; then
 	EXT_DTS=$(realpath $EXT_DTS)
 fi
 
-echo DSK=$SDK
 
+echo SDK=$SDK
 source $SDK
 
-unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
+. cc_cmd_make.sh
+
+# unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS MACHINE LD_LIBRARY_PATH
 
 
 _var()
@@ -103,8 +105,8 @@ _flash()
 
 _all()
 {
-	mount_sdcard_and_wait $FIP &
-	_make && _install && _update_fip && _flash && reset_board
+	g_board mount_sdcard_and_wait $FIP & disown %1
+	_make && _install && _update_fip && _flash && g_board reset
 }
 
 # eval _$@

@@ -6,21 +6,21 @@ case "$my_current_repo" in
 
 "tfa")
 	source build_tfa.sh
+	eval _"$@"
 	;;
  "optee")
 	source build_optee.sh
+	eval _"$@"
 	;;
 "uboot")
 	source build_uboot.sh
+	eval _$@
 	;;
 "kernel")
 	source build_kernel.sh $@
 	;;
 "tfm")
 	source build_tfm.sh $@
+	eval _$@
 	;;
-*)
-	exit 1
 esac
-
-eval _$@

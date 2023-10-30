@@ -1,16 +1,16 @@
-CC_BOARD_NAME=stm32mp157c-dk2
-CC_BOARD_BUILD=stm32mp157c-dk2
+export CC_BOARD_NAME=stm32mp157c-dk2
+export CC_BOARD_BUILD=stm32mp157c-dk2
 
-source $GTools_boards/stm32mp1
+source $GTOOLS_PATH/Boards/common/stm32mp1
 
 # TFA
-AARCH32_SP=sp_min
+export AARCH32_SP=sp_min
 
 # OPTEE
 
 # UBOOT
-UBOOT_DEFCONFIG="stm32mp15_trusted_defconfig"
+export UBOOT_DEFCONFIG="stm32mp15_trusted_defconfig"
 
 # KERNEL
 
-dev_prompt ${CC_BOARD_NAME}_spmin
+. dev_prompt.sh ${CC_BOARD_NAME}_spmin

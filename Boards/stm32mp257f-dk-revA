@@ -1,11 +1,11 @@
-CC_BOARD_NAME=stm32mp257f-dk-revA
-CC_BOARD_BUILD=stm32mp257f-dk
+export CC_BOARD_NAME=stm32mp257f-dk-revA
+export CC_BOARD_BUILD=stm32mp257f-dk
 
-source $GTools_boards/stm32mp2
+source $GTOOLS_PATH/Boards/common/stm32mp2
 
 # TFA
 unset STM32MP_DDR4_TYPE
-STM32MP_LPDDR4_TYPE=1
+export STM32MP_LPDDR4_TYPE=1
 
 # OPTEE
 
@@ -13,4 +13,4 @@ STM32MP_LPDDR4_TYPE=1
 
 # KERNEL
 
-dev_prompt $CC_BOARD_NAME
+. dev_prompt.sh ${CC_BOARD_NAME}
