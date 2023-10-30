@@ -31,6 +31,8 @@ fi
 unset CFG_EXT_DTS
 unset CFG_SCP_FIRMWARE
 
+export CROSS_COMPILE64=$CROSS_COMPILE
+
 # if test "$CFG_EXT_DTS"; then
 # 	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
 # fi
