@@ -103,5 +103,4 @@ flash_fip()
 	gpartition_gflash "$FIP" $file
 }
 
-
 eval $@

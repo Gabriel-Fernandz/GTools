@@ -1,6 +1,6 @@
 . cc_cmd_clean.sh
 
-export SDK=`g_sdk get MP2 path`
+export SDK=`g_config get_sdk MP2 path`
 
 export tfa_file='tfa.stm32'
 export fip_name="fip.bin"

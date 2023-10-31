@@ -1,0 +1,34 @@
+#!/bin/bash
+
+g_tools_ini_file=~/.gtools.ini
+
+get_sdk()
+{
+	if [ -z "$1" ] || [ -z "$2" ]; then
+		echo  "get_sdk <MP1 MP2> <path url>"
+		exit 1
+	fi
+
+	git config -f ${g_tools_ini_file} --get SDK.$1.$2
+}
+
+get_dev_prompt()
+{
+	git config -f ${g_tools_ini_file} --get prompt.name
+	if [ $? -ne 0 ]; then
+		echo ""
+	fi
+}
+
+set_prompt()
+{
+	git config -f ${g_tools_ini_file} --replace-all prompt.name $1
+}
+
+
+set_default_prompt()
+{
+	git config -f ${g_tools_ini_file} --replace-all prompt.name default_prompt
+}
+
+eval $@
