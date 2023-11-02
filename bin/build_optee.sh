@@ -43,6 +43,7 @@ unset CFG_SCP_FIRMWARE
 # 	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
 # fi
 
+source $GTOOLS_PATH/Boards/common/stm32mp1
 
 _var()
 {
