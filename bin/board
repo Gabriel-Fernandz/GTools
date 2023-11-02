@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+
+"""board.
+
+Usage:
+  board list
+  board set
+  board set <board>
+  board (-h | --help)
+  board --version
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+
+
+"""
+
+from docopt import docopt
+
+import os
+import subprocess
+import json
+import dialog
+import glob
+
+
+myGtools_path = os.environ['GTOOLS_PATH']
+dial = dialog.Dialog(dialog="dialog")
+
+nom_fichier_conf = ".conf"
+
+def Get_Board_List():
+	repertoire = myGtools_path+ '/Boards/'
+	tous_les_elements = glob.glob(os.path.join(repertoire, 'stm32mp*'))
+	fichiers_stm32mp = [os.path.basename(fichier) for fichier in tous_les_elements if os.path.isfile(fichier)]
+	
+	return fichiers_stm32mp
+
+	print(fichiers_stm32mp)
+
+def Display_Board_List(fichiers_stm32mp):
+	for b in fichiers_stm32mp:
+		print (".", b)
+
+def Get_Board():
+
+	fichiers_stm32mp = Get_Board_List()
+
+	Boards = []
+
+	for board in fichiers_stm32mp:
+		status = True
+		Boards.append((board, '', status))
+		status = False
+
+	code, s_board = dial.radiolist("Board list:", choices=Boards)
+
+	if code == 'cancel':
+		return None
+
+	return s_board
+
+def Board_save_config(nom):
+	with open(nom_fichier_conf, 'w') as fichier_conf:
+		fichier_conf.write(f"{nom}\n")
+
+# board = Get_Board()
+
+# print (board)
+
+
+
+if __name__ == '__main__':
+	arg = docopt(__doc__, version='go 1.0')
+
+print (arg)
+
+if arg['list']:
+	Display_Board_List(Get_Board_List())
+
+elif arg['set']:
+
+	config_name = arg['<board>']
+
+	if config_name == None:
+		config_name = Get_Board()
+	
+	if config_name != None:
+		Board_save_config(config_name)
+	
+
+# else:
+# 	print ("else")

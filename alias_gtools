@@ -6,15 +6,3 @@ alias kernel='cd kernel 2>/dev/null; cd ../kernel'
 alias dt='cd dt 2>/dev/null; cd ../dt'
 alias scp='cd scp 2>/dev/null; cd ../scp'
 
-
-alias conf_stm32mp257f-dk-revA='. $GTools_boards/stm32mp257f-dk-revA'
-alias conf_stm32mp257f-ev1-revB='. $GTools_boards/stm32mp257f-ev1-revB'
-alias conf_stm32mp257f-ev1-revB_w_scpt='. $GTools_boards/stm32mp257f-ev1-revB_w_scp'
-alias conf_stm32mp257f-ev1-revB-ca35tdcid-ostl='. $GTools_boards/stm32mp257f-ev1-revB-ca35tdcid-ostl'
-
-alias conf_stm32mp257f-valid3-revB='. $GTools_boards/stm32mp257f-valid3-revB'
-
-alias conf_stm32mp157c-dk2='. $GTools_boards/stm32mp157c-dk2'
-alias conf_stm32mp157c-dk2_spmin='. $GTools_boards/stm32mp157c-dk2_spmin'
-
-alias conf_stm32mp135f-dk='. $GTools_boards/stm32mp135f-dk'
