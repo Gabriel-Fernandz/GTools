@@ -6,3 +6,4 @@ alias kernel='cd kernel 2>/dev/null; cd ../kernel'
 alias dt='cd dt 2>/dev/null; cd ../dt'
 alias scp='cd scp 2>/dev/null; cd ../scp'
 
+alias v='test -s .conf && board=`cat .conf` || true &&  test -s ../.conf && board=`cat ../.conf` && source $board'
