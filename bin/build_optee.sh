@@ -30,20 +30,20 @@ if test -z "$CC_BOARD_NAME"; then
 	exit 0
 fi
 
-unset CFG_EXT_DTS
-unset CFG_SCP_FIRMWARE
+# unset CFG_EXT_DTS
+# unset CFG_SCP_FIRMWARE
 
 # export CROSS_COMPILE64=$CROSS_COMPILE
 
-# if test "$CFG_EXT_DTS"; then
-# 	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
-# fi
+if test "$CFG_EXT_DTS"; then
+	CFG_EXT_DTS=$(realpath $CFG_EXT_DTS)
+fi
 
-# if test "$CFG_SCP_FIRMWARE"; then
-# 	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
-# fi
+if test "$CFG_SCP_FIRMWARE"; then
+	CFG_SCP_FIRMWARE=$(realpath $CFG_SCP_FIRMWARE)
+fi
 
-source $GTOOLS_PATH/Boards/common/stm32mp1
+# source $GTOOLS_PATH/Boards/common/stm32mp1
 
 _var()
 {

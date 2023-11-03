@@ -215,6 +215,7 @@ _all_old()
 
 
 	_make && g_board mount_sdcard_and_wait bootfs && _flash && g_board reset
+	# _make && g_board mount_sdcard_and_wait bootfs && _flash && g_board board reset
 }
 
 _go_build()

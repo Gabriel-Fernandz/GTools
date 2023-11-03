@@ -14,13 +14,24 @@ alias views='cd /local/home/frq07381/views'
 
 vvv()
 {
-	local board
+	local board=""
 
-	if [ -e "./.conf" ] || [ -e "../.conf" ]; then
-		read -r board < "${PWD}/.conf" || read -r board < "${PWD}/../.conf"
-		source $board
+	if [ -e "./.conf" ] ; then
+		read -r board < "${PWD}/.conf"
+	elif [ -e "../.conf" ]; then
+		read -r board < "${PWD}/../.conf"
 	else
 		echo "Le fichier .conf n'existe pas dans le répertoire courant ni dans le répertoire parent."
 	fi
-	echo eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+
+	if [ "$board" ] ; then
+		source $board
+	fi
+
+	# if [ -e "./.conf" ] || [ -e "../.conf" ]; then
+	# 	read -r board < "${PWD}/.conf" || read -r board < "${PWD}/../.conf"
+	# 	source $board
+	# else
+	# 	echo "Le fichier .conf n'existe pas dans le répertoire courant ni dans le répertoire parent."
+	# fi
 }

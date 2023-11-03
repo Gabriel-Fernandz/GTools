@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """board.
 
@@ -82,7 +82,8 @@ def board_reset():
 
 # print (board)
 
-
+def clear_screen():
+	os.system("clear")
 
 if __name__ == '__main__':
 	arg = docopt(__doc__, version='go 1.0')
@@ -99,12 +100,12 @@ elif arg['set']:
 
 	config_name = arg['<board>']
 
-	if config_name == None:
-		config_name = Get_Board()
-	
 	if config_name != None:
 		Board_save_config(config_name)
-	
+	else:
+		config_name = Get_Board()
+		Board_save_config(config_name)
+		clear_screen()
 
 # else:
 # 	print ("else")
