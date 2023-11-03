@@ -1,0 +1,26 @@
+alias tfa='cd tfa 2>/dev/null; cd ../tfa'
+alias tfm='cd tfm 2>/dev/null; cd ../tfm'
+alias optee='cd optee 2>/dev/null; cd ../optee'
+alias uboot='cd uboot 2>/dev/null; cd ../uboot'
+alias kernel='cd kernel 2>/dev/null; cd ../kernel'
+alias dt='cd dt 2>/dev/null; cd ../dt'
+alias scp='cd scp 2>/dev/null; cd ../scp'
+
+# alias v='test -s .conf && board=`cat .conf` || true &&  test -s ../.conf && board=`cat ../.conf` && source $board'
+# alias v='test -s .conf && board=`cat .conf`; echo bb=$board; source $board'
+
+alias repos='cd /local/home/frq07381/myWorkspace/myRepos'
+alias views='cd /local/home/frq07381/views'
+
+vvv()
+{
+	local board
+
+	if [ -e "./.conf" ] || [ -e "../.conf" ]; then
+		read -r board < "${PWD}/.conf" || read -r board < "${PWD}/../.conf"
+		source $board
+	else
+		echo "Le fichier .conf n'existe pas dans le répertoire courant ni dans le répertoire parent."
+	fi
+	echo eeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+}

@@ -4,6 +4,7 @@
 
 Usage:
   board list
+  board reset
   board set
   board set <board>
   board (-h | --help)
@@ -23,7 +24,7 @@ import subprocess
 import json
 import dialog
 import glob
-
+import termios
 
 myGtools_path = os.environ['GTOOLS_PATH']
 dial = dialog.Dialog(dialog="dialog")
@@ -34,10 +35,11 @@ def Get_Board_List():
 	repertoire = myGtools_path+ '/Boards/'
 	tous_les_elements = glob.glob(os.path.join(repertoire, 'stm32mp*'))
 	fichiers_stm32mp = [os.path.basename(fichier) for fichier in tous_les_elements if os.path.isfile(fichier)]
-	
+
+	fichiers_stm32mp.sort()
+
 	return fichiers_stm32mp
 
-	print(fichiers_stm32mp)
 
 def Display_Board_List(fichiers_stm32mp):
 	for b in fichiers_stm32mp:
@@ -65,6 +67,17 @@ def Board_save_config(nom):
 	with open(nom_fichier_conf, 'w') as fichier_conf:
 		fichier_conf.write(f"{nom}\n")
 
+import termios
+import serial
+
+def board_reset():
+	# python -c 'import termios; termios.tcsendbreak(3, 0)' 3>/dev/ttyACM0
+
+	ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+	fd = ser.fileno()
+	termios.tcsendbreak(fd, 0)
+
+
 # board = Get_Board()
 
 # print (board)
@@ -78,6 +91,9 @@ print (arg)
 
 if arg['list']:
 	Display_Board_List(Get_Board_List())
+
+elif arg['reset']:
+	board_reset()
 
 elif arg['set']:
 
