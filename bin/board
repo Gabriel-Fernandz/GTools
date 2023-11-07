@@ -5,6 +5,7 @@
 Usage:
   board list
   board reset
+  board mount
   board set
   board set <board>
   board (-h | --help)
@@ -77,6 +78,43 @@ def board_reset():
 	fd = ser.fileno()
 	termios.tcsendbreak(fd, 0)
 
+import time
+
+def mount_sdcard():
+	ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+
+	# Boucle de lecture de la console
+	while True:
+		# Lire une ligne de la console
+		# line = ser.readline().decode('utf-8').strip()
+		# line = ser.readline().decode('utf-8').rstrip() # Lecture des données et suppression des caractères de fin de ligne
+		line = ser.read()
+		# print(line)
+		# line = ''
+		# Vérifier si la ligne contient le prompt
+		if 'Hit any key to stop autoboot' in line:
+			# Envoyer la commande pour arrêter le démarrage automatique
+			# ser.write(b"\0x3")
+
+			# ser.write(b"\0x3")
+			while True:
+				ser.write(b'\03')
+
+				time.sleep(0.5) # Pause de 0.5 seconde
+
+				ser.write(b'ums 0 mmc 0\n')
+				break
+
+
+			# ser.write(b'  \n')
+			# ser.write(b'ums 0 mmc 0\n')
+			# break  # Sortir de la boucle de lecture
+		# ser.write(b'\0x3')
+			# ser.write(b'ums 0 mmc 0\n')
+
+		# Afficher la ligne lue
+	# Fermer la connexion série
+	# ser.close()
 
 # board = Get_Board()
 
@@ -96,6 +134,10 @@ if arg['list']:
 elif arg['reset']:
 	board_reset()
 
+elif arg['mount']:
+	 board_reset()
+	 mount_sdcard()
+ 
 elif arg['set']:
 
 	config_name = arg['<board>']

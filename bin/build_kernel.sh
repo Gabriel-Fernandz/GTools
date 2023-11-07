@@ -97,7 +97,7 @@ _savedefconfig()
 
 	g_execute.sh "$cmd"
 
-        g_execute.sh "cp ${CC_BUILD_DIR}/defconfig arch/$ARCH/configs/$(echo ${DEFCONFIG} | cut -d' ' -f1)"
+	g_execute.sh "cp ${CC_BUILD_DIR}/defconfig arch/$ARCH/configs/$(echo ${DEFCONFIG} | cut -d' ' -f1)"
 }
 
 
@@ -133,13 +133,13 @@ _modules()
 
 _install()
 {
-	# __make
+	__make
 
-	# cmd+=" INSTALL_MOD_STRIP=1"
-	# cmd+=" INSTALL_MOD_PATH=${INSTALL_MOD_PATH}"
-	# cmd+=" modules_install"
+	cmd+=" INSTALL_MOD_STRIP=1"
+	cmd+=" INSTALL_MOD_PATH=${INSTALL_MOD_PATH}"
+	cmd+=" modules_install"
 
-	# g_execute.sh "$cmd"
+	g_execute.sh "$cmd"
 
 	g_execute.sh "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/build"
 	g_execute.sh "rm ${CC_BUILD_DIR}/${INSTALL_MOD_PATH}/lib/modules/*/source"
