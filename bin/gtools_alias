@@ -12,6 +12,9 @@ alias scp='cd scp 2>/dev/null; cd ../scp'
 alias repos='cd /local/home/frq07381/myWorkspace/myRepos'
 alias views='cd /local/home/frq07381/views'
 
+alias acm0='export GTOOLS_TERM='/dev/ttyACM0'; gtkterm -p $GTOOLS_TERM &'
+alias acm2='export GTOOLS_TERM='/dev/ttyACM2'; gtkterm -p $GTOOLS_TERM &'
+
 vvv()
 {
 	local board=""

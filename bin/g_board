@@ -1,7 +1,11 @@
 
+if test -z "$GTOOLS_TERM"; then
+	GTOOLS_TERM='/dev/ttyACM0'
+fi
+
 reset()
 {
-        python -c 'import termios; termios.tcsendbreak(3, 0)' 3>/dev/ttyACM0
+        python -c 'import termios; termios.tcsendbreak(3, 0)' 3>${GTOOLS_TERM}
 }
 
 wait_mount()
@@ -21,7 +25,6 @@ wait_mount()
 
 mount_sdcard_and_wait()
 {
-	serial_port=/dev/ttyACM0
 	board_is_resting=0
 
 	while : ; do
@@ -35,7 +38,7 @@ mount_sdcard_and_wait()
 				reset
 				sleep 2
 			else
-				echo "ums 0 mmc 0" > $serial_port
+				echo "ums 0 mmc 0" > ${GTOOLS_TERM}
 				sleep 0.5
 			fi
 		else

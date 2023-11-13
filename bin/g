@@ -14,10 +14,10 @@ case "$my_current_repo" in
 	source build_uboot.sh
 	;;
 "kernel")
-	source build_kernel.sh $@
+	source build_kernel.sh
 	;;
 "tfm")
-	source build_tfm.sh $@
+	source build_tfm.sh
 	;;
 *)
 	exit 1

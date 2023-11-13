@@ -23,6 +23,6 @@ if test "$prompt"; then
 	if [ "$(type -t $prompt)" = "function" ]; then
 		eval $prompt $1
 	else
-		echo "$prompt doesn't existe !"
+		echo "$prompt doesn't exist !"
 	fi
 fi

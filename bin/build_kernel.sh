@@ -146,7 +146,7 @@ _install()
 
 }
 
-_all()
+_all_new()
 {
 	__make
 
@@ -195,7 +195,7 @@ _flash()
 	/bin/sync
 }
 
-_all_old()
+_all()
 {
 	# cmd="make"
 	# cmd+=" -j $(nproc)"

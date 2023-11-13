@@ -3,20 +3,23 @@
 """board.
 
 Usage:
-  board list
-  board reset
-  board mount
-  board set
-  board set <board>
+  board (-l | --list)
+  board (-r | --reset)
+  board (-m | --mount)
+  board (-s | --set)
+  board --set <board>
   board (-h | --help)
   board --version
 
 Options:
   -h --help     Show this screen.
   --version     Show version.
-
-
+  -l --list
+  -m --mount
+  -r --reset
+  -s --set
 """
+
 
 from docopt import docopt
 
@@ -27,13 +30,22 @@ import dialog
 import glob
 import termios
 
-myGtools_path = os.environ['GTOOLS_PATH']
+serial_port = os.environ.get('GTOOLS_TERM')
+if serial_port is None:
+	serial_port='/dev/ttyACM0'
+
+gtools_path = os.environ.get('GTOOLS_PATH')
+if gtools_path is None:
+	print("GTOOLS_PATH not set !")
+	exit (1)
+
 dial = dialog.Dialog(dialog="dialog")
 
 nom_fichier_conf = ".conf"
 
 def Get_Board_List():
-	repertoire = myGtools_path+ '/Boards/'
+
+	repertoire = gtools_path + '/Boards/'
 	tous_les_elements = glob.glob(os.path.join(repertoire, 'stm32mp*'))
 	fichiers_stm32mp = [os.path.basename(fichier) for fichier in tous_les_elements if os.path.isfile(fichier)]
 
@@ -72,16 +84,14 @@ import termios
 import serial
 
 def board_reset():
-	# python -c 'import termios; termios.tcsendbreak(3, 0)' 3>/dev/ttyACM0
-
-	ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+	ser = serial.Serial(serial_port, 115200, timeout=1)
 	fd = ser.fileno()
 	termios.tcsendbreak(fd, 0)
 
 import time
 
 def mount_sdcard():
-	ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
+	ser = serial.Serial(serial_port, 115200, timeout=1)
 
 	# Boucle de lecture de la console
 	while True:
@@ -128,17 +138,17 @@ if __name__ == '__main__':
 
 print (arg)
 
-if arg['list']:
+if arg['--list']:
 	Display_Board_List(Get_Board_List())
 
-elif arg['reset']:
+elif arg['--reset']:
 	board_reset()
 
-elif arg['mount']:
-	 board_reset()
-	 mount_sdcard()
- 
-elif arg['set']:
+elif arg['--mount']:
+	board_reset()
+	mount_sdcard()
+
+elif arg['--set']:
 
 	config_name = arg['<board>']
 
@@ -148,6 +158,3 @@ elif arg['set']:
 		config_name = Get_Board()
 		Board_save_config(config_name)
 		clear_screen()
-
-# else:
-# 	print ("else")
