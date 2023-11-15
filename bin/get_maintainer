@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+"""get_maintainer.
+
+Usage:
+  get_maintainer --to <path>
+  get_maintainer --cc <path>
+  get_maintainer (-h | --help)
+  get_maintainer --version
+
+Options:
+  -h --help     Show this screen.
+  --version     Show version.
+"""
+
+from docopt import docopt
+
+import os
+import subprocess
+
+def get_maintainer_list_by_file(mode, file):
+	cmd="./scripts/get_maintainer.pl --nogit --nogit-fallback --norolestats " + mode + " " + file
+	cmd = cmd.split(' ')
+	process = subprocess.run(cmd, check=False, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, universal_newlines=True)
+
+	return process.stdout
+
+def get_maintainer_list(mode, path):
+	list_fichier = []
+
+	if os.path.isfile(path):
+		list_fichier.append(path)
+	else:
+		for filename in os.listdir(path):
+			if "0000" not in filename and "cover" not in filename:
+				list_fichier.append(path + '/' + filename)
+
+	list = []
+
+	for filename in list_fichier:
+		for name in get_maintainer_list_by_file(mode, filename).split('\n'):
+			if name not in list and name !='':
+				list.append(name)
+
+	print (",".join(list))
+
+def get_maintainer_list_cc():
+	os.system("clear")
+
+if __name__ == '__main__':
+	arg = docopt(__doc__, version='go 1.0')
+
+# print (arg)
+
+if arg['--to']:
+	get_maintainer_list('--nol', arg['<path>'])
+
+elif arg['--cc']:
+	get_maintainer_list('--nom', arg['<path>'])

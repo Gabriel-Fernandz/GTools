@@ -123,6 +123,8 @@ _clean()
 
 _modules()
 {
+	g_execute.sh "/bin/touch .scmversion"
+
 	__make
 	# cmd+=" INSTALL_MOD_PATH=${INSTALL_MOD_PATH}"
 
