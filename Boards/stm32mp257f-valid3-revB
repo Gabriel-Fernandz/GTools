@@ -4,6 +4,7 @@ export CC_BOARD_BUILD=stm32mp257f-valid3
 source $GTOOLS_PATH/Boards/common/stm32mp2
 
 # TFA
+export CONFIG_STM32MP25X_REVA=1
 
 # OPTEE
 

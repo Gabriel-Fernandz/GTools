@@ -7,6 +7,7 @@ source $GTOOLS_PATH/Boards/common/stm32mp1
 # TFA
 
 # OPTEE
+export CFG_STM32_CLK_DEBUG=1
 
 # UBOOT
 export UBOOT_DEFCONFIG="stm32mp13_defconfig"

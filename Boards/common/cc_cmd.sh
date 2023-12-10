@@ -47,6 +47,8 @@ kernel_command=(
 	KBUILD_EXTDTS
 	KERNEL_BUILD_DIR
 	W
+	C
+	CF
 )
 
 build_kernel_command=(

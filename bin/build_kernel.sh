@@ -148,6 +148,11 @@ _install()
 
 }
 
+_mi()
+{
+	_modules && _install
+}
+
 _all_new()
 {
 	__make
@@ -231,4 +236,11 @@ _pop()
 	popd
 }
 
-# eval _"$@"
+# --> This command will validate that your yaml file is well written and will verify that exmaple (put in your yaml file) is compliant with your yaml binding.
+# g make dt_binding_check
+
+#  --> This command will verify that your dts file is compliant with existing yaml bindings.
+# g make dtbs_check
+
+# g make CHECK_DTBS=y st/stm32mp257f-ev1.dtb
+# g make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/clock/st,stm32mp25-rcc.yaml

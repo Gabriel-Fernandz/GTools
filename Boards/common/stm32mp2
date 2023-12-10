@@ -72,6 +72,8 @@ export INSTALL_MOD_PATH="modules"
 export KERNEL_USER_MAKE_OPTIONS="Image.gz "
 export KERNEL_USER_MAKE_OPTIONS+="vmlinux "
 export KERNEL_USER_MAKE_OPTIONS+="dtbs "
+# export C=1
+# export CF="'-fdiagnostic-prefix -D__CHECK_ENDIAN__ -fmax-errors=unlimited -fmax-warnings=unlimited'"
 
 export KERNEL_DEFCONFIG="fragment-01-defconfig-cleanup.config "
 export KERNEL_DEFCONFIG+="fragment-02-defconfig-addons.config "
